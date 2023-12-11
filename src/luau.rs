@@ -144,11 +144,13 @@ pub fn bytecode(input: &[u8]) -> IResult<&[u8], LuaChunk> {
                 le_u8,
             ))(input1)?;
 
+        let mut lineinfo = vec![];
         if has_lineinfo > 0 {
             let (input2, linegaplog2) = be_u8(input1)?;
             let intervals = ((instructions.len() - 1) >> (linegaplog2 as usize)) + 1;
             let (input2, _lineinfo) = count(be_u8, instructions.len())(input2)?;
             let (input2, _abslineinfo) = count(complete::be_i32, intervals)(input2)?;
+            lineinfo = _lineinfo;
             input1 = input2;
         }
 
@@ -190,6 +192,7 @@ pub fn bytecode(input: &[u8]) -> IResult<&[u8], LuaChunk> {
             } else {
                 None
             },
+            line_info: lineinfo,
             instructions,
             constants,
             locals,

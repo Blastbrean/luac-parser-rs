@@ -114,6 +114,7 @@ pub fn lua_chunk<'h, 'a: 'h>(
                     locals,
                     upvalue_names,
                     upvalue_infos,
+                    line_info: vec![],
                     num_constants: vec![],
                 }
             },

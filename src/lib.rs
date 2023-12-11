@@ -212,6 +212,8 @@ pub struct LuaChunk {
     /// for lua53
     pub upvalue_infos: Vec<UpVal>,
     pub upvalue_names: Vec<Vec<u8>>,
+    /// for luau
+    pub line_info: Vec<u8>,
 }
 
 impl std::fmt::Debug for LuaChunk {
