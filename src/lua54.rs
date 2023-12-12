@@ -133,7 +133,7 @@ pub fn lua_chunk<'h, 'a: 'h>(
                     upvalue_names,
                     num_constants: vec![],
                     upvalue_infos: upvalues,
-                    line_info: vec![],
+                    lineinfo: vec![],
                 }
             },
         )

@@ -192,7 +192,7 @@ pub fn bytecode(input: &[u8]) -> IResult<&[u8], LuaChunk> {
             } else {
                 None
             },
-            line_info: lineinfo,
+            lineinfo,
             instructions,
             constants,
             locals,

@@ -96,7 +96,7 @@ pub fn lua_chunk<'h, 'a: 'h>(
                     source_lines,
                     locals,
                     upvalue_names,
-                    line_info: vec![],
+                    lineinfo: vec![],
                     upvalue_infos,
                 }
             },

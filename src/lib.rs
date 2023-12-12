@@ -213,7 +213,7 @@ pub struct LuaChunk {
     pub upvalue_infos: Vec<UpVal>,
     pub upvalue_names: Vec<Vec<u8>>,
     /// for luau
-    pub line_info: Vec<u8>,
+    pub lineinfo: Vec<u8>,
 }
 
 impl std::fmt::Debug for LuaChunk {
@@ -229,7 +229,7 @@ impl std::fmt::Debug for LuaChunk {
             .field("constants", &self.constants)
             .field("prototypes", &self.prototypes)
             .field("upvalue_infos", &self.upvalue_infos)
-            .field("line_info", &self.line_info)
+            .field("lineinfo", &self.lineinfo)
             .finish()
     }
 }
