@@ -197,6 +197,7 @@ pub struct LuaChunk {
     pub last_line_defined: u64,
     pub num_upvalues: u8,
     pub num_params: u8,
+    pub lineinfo: Vec<u8>,
     /// Equivalent to framesize for luajit
     pub max_stack: u8,
     /// for luajit
@@ -212,8 +213,6 @@ pub struct LuaChunk {
     /// for lua53
     pub upvalue_infos: Vec<UpVal>,
     pub upvalue_names: Vec<Vec<u8>>,
-    /// for luau
-    pub lineinfo: Vec<u8>,
 }
 
 impl std::fmt::Debug for LuaChunk {
