@@ -229,6 +229,7 @@ impl std::fmt::Debug for LuaChunk {
             .field("constants", &self.constants)
             .field("prototypes", &self.prototypes)
             .field("upvalue_infos", &self.upvalue_infos)
+            .field("line_info", &self.line_info)
             .finish()
     }
 }
