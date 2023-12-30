@@ -106,6 +106,8 @@ pub fn lua_chunk<'h, 'a: 'h>(
                     } else {
                         None
                     },
+                    abslineinfo: vec![],
+                    linegaplog: 0,
                     max_stack,
                     instructions,
                     constants,

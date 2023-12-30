@@ -80,6 +80,8 @@ pub fn lua_chunk<'h, 'a: 'h>(
                     name: name.to_vec(),
                     line_defined,
                     last_line_defined,
+                    abslineinfo: vec![],
+                    linegaplog: 0,
                     num_upvalues: upvalue_infos.len() as _,
                     num_params,
                     flags: 0,

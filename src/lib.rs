@@ -213,6 +213,9 @@ pub struct LuaChunk {
     /// for lua53
     pub upvalue_infos: Vec<UpVal>,
     pub upvalue_names: Vec<Vec<u8>>,
+    // for luau
+    pub abslineinfo: Vec<i32>,
+    pub linegaplog: u8
 }
 
 impl std::fmt::Debug for LuaChunk {
@@ -229,6 +232,8 @@ impl std::fmt::Debug for LuaChunk {
             .field("prototypes", &self.prototypes)
             .field("upvalue_infos", &self.upvalue_infos)
             .field("lineinfo", &self.lineinfo)
+            .field("abslineinfo", &self.abslineinfo)
+            .field("linegaplog", &self.linegaplog)
             .finish()
     }
 }
