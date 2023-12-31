@@ -149,7 +149,7 @@ pub fn bytecode(input: &[u8]) -> IResult<&[u8], LuaChunk> {
         let mut abslineinfo1 = vec![];
         if has_lineinfo > 0 {
             let (mut input2, linegaplog2) = be_u8(input1)?;
-            let intervals = ((instructions.len() - 1) >> (linegaplog2 as usize)) + 1;
+            let intervals = ((instructions.len() - 1) >> linegaplog2) + 1;
             let mut lastoffset = 0;
             for i in 0..instructions.len() {
                 let (input3, lastoffset1) = be_u8(input2)?;
