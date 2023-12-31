@@ -154,14 +154,14 @@ pub fn bytecode(input: &[u8]) -> IResult<&[u8], LuaChunk> {
             for i in 0..instructions.len() {
                 let (input3, lastoffset1) = be_u8(input2)?;
                 lastoffset += lastoffset1;
-                lineinfo1[i] = lastoffset;
+                lineinfo1.insert(i, lastoffset);
                 input2 = input3;
             }
             let mut lastline = 0;
             for i in 0..intervals {
                 let (input3, lastline1) = complete::be_i32(input2)?;
                 lastline += lastline1;
-                abslineinfo1[i] = lastline;
+                abslineinfo1.insert(i, lastline);
                 input2 = input3;
             }
             linegaplog1 = linegaplog2;
