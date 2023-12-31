@@ -1,4 +1,4 @@
-use nom::{multi::count, number::complete::le_u8};
+use nom::number::complete::le_u8;
 
 use super::*;
 
@@ -148,12 +148,22 @@ pub fn bytecode(input: &[u8]) -> IResult<&[u8], LuaChunk> {
         let mut linegaplog1 = 0u8;
         let mut abslineinfo1 = vec![];
         if has_lineinfo > 0 {
-            let (input2, linegaplog2) = be_u8(input1)?;
+            let (mut input2, linegaplog2) = be_u8(input1)?;
             let intervals = ((instructions.len() - 1) >> (linegaplog2 as usize)) + 1;
-            let (input2, lineinfo) = count(be_u8, instructions.len())(input2)?;
-            let (input2, abslineinfo) = count(complete::be_i32, intervals)(input2)?;
-            lineinfo1 = lineinfo;
-            abslineinfo1 = abslineinfo;
+            let mut lastoffset = 0;
+            for i in 0..instructions.len() {
+                let (input3, lastoffset1) = be_u8(input2)?;
+                lastoffset += lastoffset1;
+                lineinfo1[i] = lastoffset;
+                input2 = input3;
+            }
+            let mut lastline = 0;
+            for i in 0..intervals {
+                let (input3, lastline1) = complete::be_i32(input2)?;
+                lastline += lastline1;
+                abslineinfo1[i] = lastline;
+                input2 = input3;
+            }
             linegaplog1 = linegaplog2;
             input1 = input2;
         }
