@@ -74,7 +74,7 @@ pub fn constants<'a>(
             })(input),
             LBC_CONSTANT_STRING => map(|i| string(i, stable), LuaConstant::String)(input),
             // LBC_CONSTANT_IMPORT => map(complete::be_u32, |i| LuaConstant::Imp(i as _))(input),
-            LBC_CONSTANT_IMPORT => map(complete::be_u32, |_| LuaConstant::Null)(input),
+            LBC_CONSTANT_IMPORT => map(complete::le_u32, |_| LuaConstant::Null)(input),
             LBC_CONSTANT_TABLE => {
                 let (input, t) = table(input, &result)?;
                 Ok((input, LuaConstant::Table(t.into())))
@@ -118,10 +118,10 @@ pub fn bytecode(input: &[u8]) -> IResult<&[u8], LuaChunk> {
 
     for _ in 0..num {
         let (mut input1, (max_stack, num_params, num_upvalues, is_vararg)) =
-            tuple((be_u8, be_u8, be_u8, be_u8))(input)?;
+            tuple((le_u8, le_u8, le_u8, le_u8))(input)?;
 
         if _version >= 4 {
-            let (input2, _flags) = be_u8(input1)?;
+            let (input2, _flags) = le_u8(input1)?;
             let (mut input2, types_size) = varint(input2)?;
 
             if types_size > 0 && types_version == 1 {
@@ -148,23 +148,26 @@ pub fn bytecode(input: &[u8]) -> IResult<&[u8], LuaChunk> {
         let mut linegaplog1 = 0u8;
         let mut abslineinfo1 = vec![];
         if has_lineinfo > 0 {
-            let (mut input2, linegaplog2) = be_u8(input1)?;
-            let intervals = ((instructions.len() - 1) >> linegaplog2) + 1;
+            let (mut input2, linegaplog2) = le_u8(input1)?;
+            linegaplog1 = linegaplog2;
+
             let mut lastoffset = 0;
             for i in 0..instructions.len() {
-                let (input3, lastoffset1) = be_u8(input2)?;
+                let (input3, lastoffset1) = le_u8(input2)?;
                 lastoffset += lastoffset1;
                 lineinfo1.insert(i, lastoffset);
                 input2 = input3;
             }
+
             let mut lastline = 0;
+            let intervals = ((instructions.len() - 1) >> linegaplog2) + 1;
             for i in 0..intervals {
-                let (input3, lastline1) = complete::be_i32(input2)?;
+                let (input3, lastline1) = complete::le_i32(input2)?;
                 lastline += lastline1;
                 abslineinfo1.insert(i, lastline);
                 input2 = input3;
             }
-            linegaplog1 = linegaplog2;
+
             input1 = input2;
         }
 
