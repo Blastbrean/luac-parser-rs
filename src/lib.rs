@@ -215,7 +215,7 @@ pub struct LuaChunk {
     pub upvalue_names: Vec<Vec<u8>>,
     // for luau
     pub abslineinfo: Vec<i32>,
-    pub linegaplog: u8
+    pub linegaplog: u8,
 }
 
 impl std::fmt::Debug for LuaChunk {
@@ -509,7 +509,9 @@ pub fn parse(input: &[u8]) -> Result<LuaBytecode, String> {
     lua_bytecode(input).map(|x| x.1).map_err(|e| {
         format!(
             "{:#?}",
-            e.map(|e| e.map_locations(|p| unsafe { p.as_ptr().sub_ptr(input.as_ptr()) }))
+            e.map(
+                |e| e.map_locations(|p| unsafe { p.as_ptr().offset_from_unsigned(input.as_ptr()) })
+            )
         )
     })
 }
